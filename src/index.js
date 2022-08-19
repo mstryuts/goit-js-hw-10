@@ -33,7 +33,7 @@ function onInput() {
       renderCountryList(country)
       
     })
-    .catch(error => Notiflix.Notify.failure("Oops, there is no country with that name"))
+    .catch(error => Notiflix.Notify.failure('Oops, there is no country with that name'))
 }
 
 function renderSingleCountry(data) {
@@ -47,7 +47,6 @@ function renderSingleCountry(data) {
 
   })
 }
-
 
 
 function renderCountryList(data) {
