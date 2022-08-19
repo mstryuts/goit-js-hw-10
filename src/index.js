@@ -28,3 +28,5 @@ function onInput(){
 // })
 
 // fetchCountries('ukraine').then(data => console.log(data))
+
+console.log(123)
