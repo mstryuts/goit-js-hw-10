@@ -1,13 +1,12 @@
 import './css/styles.css';
 import debounce from 'lodash.debounce';
 import { fetchCountries } from './js/fetchCountries';
+import Notiflix from 'notiflix';
 
 const DEBOUNCE_DELAY = 300;
 const input = document.getElementById('search-box');
 const countryList = document.querySelector('.country-list');
 const countryInfo = document.querySelector('.country-info');
-
-input.addEventListener('input',debounce(onInput, DEBOUNCE_DELAY));
 
 
 function onInput() {
@@ -17,7 +16,6 @@ function onInput() {
     return (countryList.innerHTML = ''), (countryInfo.innerHTML = '');
   }
 
-
   fetchCountries(name)
     .then(country => {
 
@@ -26,16 +24,20 @@ function onInput() {
 
       if (country.length === 1) {
         renderSingleCountry(country)
-      } else if (country.length >= 10) {
-        alert('idi nahui')
-      } else {
-        renderCountryList(country)
+        return
       }
+      if (country.length >= 10) {
+        Notiflix.Notify.info('Too many matches found. Please enter a more specific name.');
+        return
+      }
+      renderCountryList(country)
+      
     })
+    .catch(error => Notiflix.Notify.failure("Oops, there is no country with that name"))
 }
 
 function renderSingleCountry(data) {
-  const markup = data.map(({ name, flags, capital, population, languages }) => {
+  countryInfo.innerHTML = data.map(({ name, flags, capital, population, languages }) => {
     return `<h1><img class="country-info__item--flag" src="${flags.png}" alt="${name.official}">${
       name.official
     }</h1>
@@ -44,13 +46,12 @@ function renderSingleCountry(data) {
       <p class="country-info__item--categories">Languages: ${Object.values(languages)}</p>`;
 
   })
-  countryInfo.innerHTML = markup;
 }
 
 
 
 function renderCountryList(data) {
-  const markup = data
+  countryList.innerHTML = data
     .map(({name,flags}) => {
       return `<li class="country-list__item">
               <img class="country-list__item--flag" src="${flags.svg}" alt="Flag of ${name.official}">
@@ -58,5 +59,6 @@ function renderCountryList(data) {
           </li>`;
     })
     .join("");
-  countryList.innerHTML = markup;
 }
+
+input.addEventListener('input',debounce(onInput, DEBOUNCE_DELAY));
