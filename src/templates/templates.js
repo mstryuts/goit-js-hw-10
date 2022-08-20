@@ -1,5 +1,5 @@
 
-function renderCountryList(data) {
+export function renderCountryList(data) {
   return data
     .map(({name,flags}) => {
       return `<li class="country-list__item">
@@ -10,7 +10,7 @@ function renderCountryList(data) {
     .join("");
 }
 
-function renderSingleCountry(data) {
+export function renderSingleCountry(data) {
   return data.map(({ name, flags, capital, population, languages }) => {
     return `<h1><img class="country-info__item--flag" src="${flags.png}" alt="${name.official}">${
       name.official
@@ -21,5 +21,3 @@ function renderSingleCountry(data) {
 
   })
 }
-
-export { renderSingleCountry, renderCountryList }
